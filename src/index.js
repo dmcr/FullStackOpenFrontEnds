@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const App = () => {
-    const course = 'Half Stack application development'
-    const parts = [
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
       {
         name: 'Fundamentals of React',
         exercises: 10
@@ -17,12 +18,13 @@ const App = () => {
         exercises: 14
       }
     ]
+  }
   
     return (
       <div>
-        <Header title={course}/>
-        <Content contents={parts}/>
-        <Total total={parts}/>
+        <Header title={course.name}/>
+        <Content contents={course.parts}/>
+        <Total total={course.parts}/>
       </div>
     )
   }
@@ -34,7 +36,6 @@ const App = () => {
   }
 
   const Content = ({contents}) => {
-    console.log(contents);
     return (
     <div>
       <Part content={contents[0]} />
