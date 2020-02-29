@@ -8,11 +8,25 @@ const App = () => {
     const [good, setGood] = useState(0)
     const [neutral, setNeutral] = useState(0)
     const [bad, setBad] = useState(0)
+    const [feedback, setFeedback] = useState(false)
 
-    // state setters
-    const setGoodState = newGood => setGood(newGood)
-    const setNeutralState = newNeutral => setNeutral(newNeutral)
-    const setBadState = newBad => setBad(newBad)
+    // Setters
+    const handleFeedback = () => (!feedback) ? setFeedback(true) : null
+
+    const handleGoodClick = () => {
+        setGood(good + 1)
+        handleFeedback()
+    }
+
+    const handleNeutralClick = () => {
+        setNeutral(neutral + 1)
+        handleFeedback()
+    }
+
+    const handleBadClick = () => {
+        setBad(bad + 1)
+        handleFeedback()
+    }
 
     //page content
     const unicafe = {
@@ -29,13 +43,11 @@ const App = () => {
     return (
       <div>
         <Feedback 
-            content={unicafe} 
-            goodState={good}
-            setGoodState={setGoodState}     
-            badState={bad}
-            setBadState={setBadState}
-            neutralState={neutral}
-            setNeutralState={setNeutralState}
+            title={unicafe.titles.feedback} 
+            stateNames={unicafe.stateNames}
+            handleGoodClick={handleGoodClick}     
+            handleBadClick={handleBadClick}
+            handleNeutralClick={handleNeutralClick}
         />
         <Statistics 
             stateNames={unicafe.stateNames} 
@@ -43,6 +55,7 @@ const App = () => {
             goodState={good}   
             badState={bad}
             neutralState={neutral}
+            feedbackState={feedback}
         />
       </div>
     )
@@ -51,19 +64,21 @@ const App = () => {
 const Feedback = (props) => {
     return (
         <div>
-            <Heading heading={props.content.titles.feedback} />
-            <Button handleClick={() => props.setGoodState(props.goodState + 1)} name={props.content.stateNames[0]}     />
-            <Button handleClick={() => props.setNeutralState(props.neutralState + 1)} name={props.content.stateNames[1]} />
-            <Button handleClick={() => props.setBadState(props.badState + 1)} name={props.content.stateNames[2]} />
+            <Heading heading={props.title} />
+            <Button handleClick={props.handleGoodClick} name={props.stateNames[0]}     />
+            <Button handleClick={props.handleNeutralClick} name={props.stateNames[1]} />
+            <Button handleClick={props.handleBadClick} name={props.stateNames[2]} />
         </div>
     )
 }
 
-const Statistics = ({stateNames, title, goodState, neutralState, badState}) => {
+const Statistics = ({stateNames, title, goodState, neutralState, badState, feedbackState}) => {
+    if (!feedbackState) return (<div><Heading heading={title} /> no feedback given</div>)
+
     const all = goodState + neutralState + badState;
     const avg = goodState - badState;
     const pos = goodState / (goodState + badState + neutralState) * 100;
-    //console.log({goodState})
+
     return (
         <div>
             <Heading heading={title} />
