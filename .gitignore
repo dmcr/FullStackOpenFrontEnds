@@ -2,16 +2,19 @@
 
 # dependencies
 part1/node_modules
+part2/node_modules
 unicafe/node_modules
 /.pnp
 .pnp.js
 
 # testing
 part1/coverage
+part2/coverage
 unicafe/coverage
 
 # production
 part1/build
+part2/build
 unicafe/build
 
 # misc
