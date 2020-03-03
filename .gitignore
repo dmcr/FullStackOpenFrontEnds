@@ -4,6 +4,7 @@
 part1/node_modules
 part2/node_modules
 unicafe/node_modules
+phonebook/node_modules
 /.pnp
 .pnp.js
 
@@ -11,11 +12,13 @@ unicafe/node_modules
 part1/coverage
 part2/coverage
 unicafe/coverage
+phonebook/coverage
 
 # production
 part1/build
 part2/build
 unicafe/build
+phonebook/build
 
 # misc
 .DS_Store
