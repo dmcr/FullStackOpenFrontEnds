@@ -10,19 +10,15 @@ const Content = ({parts}) => {
             exercises={part.exercises}
         />
     )
-
-    const totalExercises = () => {
-        let total = 0;
-        for (let i = 0; i < parts.length; i++) {
-            total += parts[i].exercises
-        }
-        return total
-    }
+    
+    const totalExercises = parts.reduce((s, p) => {
+        return s + p.exercises
+    }, 0)
 
     return (
         <div>
         <div>{partsList()}</div>
-        <p>Total of {totalExercises()} exercises</p>
+        <p>Total of {totalExercises} exercises</p>
         </div>
     )
 }
