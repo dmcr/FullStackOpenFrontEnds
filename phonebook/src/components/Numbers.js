@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Numbers = ({persons}) => {
-    const displayNumbers = () => persons.map(person => <li key={person.name}>{person.name}</li>)
+    const displayNumbers = () => persons.map(person => <li key={person.name}>{person.name} {person.number}</li>)
     return (
         <div>
             <h1>Numbers</h1>

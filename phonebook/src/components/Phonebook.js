@@ -1,20 +1,10 @@
 import React from 'react'
 
-const Phonebook = ({newName, handleNewNameChange, addPerson}) => {
+const Phonebook = ({filter, handleFilter}) => {
     return (
         <div>
-            <h1>Phonebook</h1>
-            <form onSubmit={addPerson}>
-            <div>
-            name: <input 
-                value={newName}
-                onChange={handleNewNameChange}
-            />
-            </div>
-            <div>
-            <button type="submit">add</button>
-            </div>
-        </form>
+        <h1>Phonebook</h1>
+        filter: <input value={filter} onChange={handleFilter} />
       </div>
     )
 }
