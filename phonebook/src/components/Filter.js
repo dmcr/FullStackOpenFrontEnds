@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Phonebook = ({filter, handleFilter}) => {
+const Filter = ({filter, handleFilter}) => {
     return (
         <div>
         <h1>Phonebook</h1>
@@ -9,4 +9,4 @@ const Phonebook = ({filter, handleFilter}) => {
     )
 }
 
-export default Phonebook
+export default Filter

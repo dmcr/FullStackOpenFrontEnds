@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Phonebook from './components/Phonebook'
+import Filter from './components/Filter'
 import Numbers from './components/Numbers'
 import NewContact from './components/NewContact'
 
@@ -24,7 +24,7 @@ const App = () => {
 
   return (
     <div>
-      <Phonebook filter={filter} handleFilter={handleFilter} />
+      <Filter filter={filter} handleFilter={handleFilter} />
       <NewContact newPerson={newPerson} handleNewNameChange={handleNewNameChange} handleNewNumberChange={handleNewNumberChange} addPerson={addPerson} />
       <Numbers persons={getFilteredPersons()}/>
     </div>
