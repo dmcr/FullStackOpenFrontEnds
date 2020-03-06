@@ -1,14 +1,21 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Filter from './components/Filter'
 import Numbers from './components/Numbers'
 import NewContact from './components/NewContact'
+import axios from 'axios'
 
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'DMCR!', number: '000000'}
-  ]) 
+  const [ persons, setPersons] = useState([]) 
   const [ newPerson, setNewPerson ] = useState({name:'',number:''})
   const [ filter, setFilter] = useState('')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
