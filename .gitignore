@@ -24,6 +24,7 @@ phonebook/build
 data-for-countries/build
 
 # misc
+data-for-countries/.env
 .DS_Store
 .env.local
 .env.development.local
