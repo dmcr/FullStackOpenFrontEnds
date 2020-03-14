@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import Filter from './compnents/Filter'
 import Countries from './compnents/Countries'
 import axios from 'axios'
-console.log(process.env.REACT_APP_OPEN_WEATHER_KEY)
+
 function App() {
   const [filter, setFilter] = useState('')
   const [countries, setCountries] = useState([])
@@ -18,6 +18,7 @@ function App() {
   const handleFilter = event => setFilter(event.target.value)
   const getCountries = () => countries.filter(country => country.name.toLowerCase().indexOf(filter.toLowerCase())>-1)
   const showOnClick = event => setFilter(event.target.value)
+  
   useEffect(() => {
     axios
       .get('https://restcountries.eu/rest/v2/all')

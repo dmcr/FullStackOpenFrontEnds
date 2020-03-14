@@ -14,7 +14,6 @@ const Country = ({country, weather, setWeather}) => {
         <img width="100" heigh="50" src={country.flag} alt={country.flag} />
         <h3>Weather in {country.name}</h3>
         <Weather country={country}  weather={weather} setWeather={setWeather}/>
-
     </div>
     )
 }
