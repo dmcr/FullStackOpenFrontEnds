@@ -2,26 +2,23 @@ import React, {useState, useEffect} from 'react';
 import Filter from './components/Filter'
 import Numbers from './components/Numbers'
 import NewContact from './components/NewContact'
-import axios from 'axios'
+import phonebookService from './services/Phonebook'
 
 const App = () => {
+  const person = {name: '',age: ''}
   const [ persons, setPersons] = useState([]) 
-  const [ newPerson, setNewPerson ] = useState({name:'',number:''})
+  const [ newPerson, setNewPerson ] = useState(person)
   const [ filter, setFilter] = useState('')
-
+  
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
+    phonebookService.getAll().then(initialPersons => setPersons(initialPersons))
   }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
     if(persons.filter(person => person.name === newPerson.name).length > 0) return alert(`${newPerson.name} is already in phone book`)
     setPersons(persons.concat(newPerson))
-    setNewPerson({name:'',number:''})
+    setNewPerson(person)
   }
 
   const handleNewNameChange = event => setNewPerson({name: event.target.value, number: newPerson.number})
