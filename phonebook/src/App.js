@@ -24,7 +24,6 @@ const App = () => {
       phonebookService.create(newPerson)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
-        setNewPerson(returnedPerson)
       })
     }
   }
