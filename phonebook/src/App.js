@@ -16,9 +16,33 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    if(persons.filter(person => person.name === newPerson.name).length > 0) return alert(`${newPerson.name} is already in phone book`)
-    setPersons(persons.concat(newPerson))
-    setNewPerson(person)
+    const personToUpdate = persons.filter(person => person.name === newPerson.name)
+    if(personToUpdate.length > 0) {
+      updatePerson({...personToUpdate[0], number : newPerson.number})
+    }
+    else {
+      phonebookService.create(newPerson)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewPerson(returnedPerson)
+      })
+    }
+  }
+
+  const updatePerson = (personToUpdate) => {
+    if (window.confirm("Person already exists, would you like to update their number?")) {
+      phonebookService.update(personToUpdate)
+      .then(returnedPerson => 
+        setPersons(persons.map(person => 
+          person.id !== returnedPerson.id ? person : returnedPerson)))
+    }
+  }
+
+  const deletePerson = (id) => {
+    if (window.confirm("Are you sure you want to delete this person?")) {
+      phonebookService.remove(id)
+      .then(success => setPersons(persons.filter(person => person.id !== id)))
+    }
   }
 
   const handleNewNameChange = event => setNewPerson({name: event.target.value, number: newPerson.number})
@@ -30,7 +54,7 @@ const App = () => {
     <div>
       <Filter filter={filter} handleFilter={handleFilter} />
       <NewContact newPerson={newPerson} handleNewNameChange={handleNewNameChange} handleNewNumberChange={handleNewNumberChange} addPerson={addPerson} />
-      <Numbers persons={getFilteredPersons()}/>
+      <Numbers deletePerson={deletePerson} persons={getFilteredPersons()}/>
     </div>
   )
 }

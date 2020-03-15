@@ -13,7 +13,7 @@ const NewContact = ({newPerson, handleNewNameChange, handleNewNumberChange, addP
                 </div>
                 <div>
                     number: <input 
-                        value={newPerson.number}
+                        value={newPerson.number || ''}
                         onChange={handleNewNumberChange}
                     />
                 </div>

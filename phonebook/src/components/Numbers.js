@@ -1,12 +1,12 @@
 import React from 'react'
+import Number from './Number'
 
-const Numbers = ({persons}) => {
-    const displayNumbers = () => persons.map(person => <li key={person.name}>{person.name} {person.number}</li>)
+const Numbers = ({persons, deletePerson}) => {  
     return (
         <div>
             <h1>Numbers</h1>
             <ul>
-                {displayNumbers()}
+                {persons.map(person => <Number key={person.name} person={person} deletePerson={deletePerson} />)}
             </ul>
         </div>
     )
