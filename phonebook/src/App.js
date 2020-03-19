@@ -3,12 +3,14 @@ import Filter from './components/Filter'
 import Numbers from './components/Numbers'
 import NewContact from './components/NewContact'
 import phonebookService from './services/Phonebook'
+import Notification from './components/Notification'
 
 const App = () => {
   const person = {name: '',age: ''}
   const [ persons, setPersons] = useState([]) 
   const [ newPerson, setNewPerson ] = useState(person)
   const [ filter, setFilter] = useState('')
+  const [ message, setMessage ] = useState(null)
   
   useEffect(() => {
     phonebookService.getAll().then(initialPersons => setPersons(initialPersons))
@@ -24,6 +26,15 @@ const App = () => {
       phonebookService.create(newPerson)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
+        setMessage({
+          message: `Added ${returnedPerson.name}`,
+          style: {
+            color: 'green',
+            fontStyle: 'italic',
+            fontSize: 25
+          }
+        })
+        setTimeout(() =>{ setMessage(null)}, 5000)
       })
     }
   }
@@ -31,16 +42,49 @@ const App = () => {
   const updatePerson = (personToUpdate) => {
     if (window.confirm("Person already exists, would you like to update their number?")) {
       phonebookService.update(personToUpdate)
-      .then(returnedPerson => 
+      .then(returnedPerson => {
         setPersons(persons.map(person => 
-          person.id !== returnedPerson.id ? person : returnedPerson)))
+          person.id !== returnedPerson.id ? person : returnedPerson))
+          setMessage({
+            message: `Updated ${returnedPerson.name}`,
+            style: {
+              color: 'green',
+              fontStyle: 'italic',
+              fontSize: 25
+            }
+          })
+          setTimeout(() =>{ setMessage(null)}, 5000)
+        })
+      .catch(error => {
+        setMessage({
+          message: `Error ${personToUpdate.name} does not exist`,
+            style: {
+              color: 'red',
+              fontStyle: 'italic',
+              fontSize: 25
+            }
+        })
+        setTimeout(() =>{ setMessage(null)}, 5000)
+        setPersons(persons.filter(person => person.id !== personToUpdate.id))
+      })
     }
   }
 
   const deletePerson = (id) => {
     if (window.confirm("Are you sure you want to delete this person?")) {
       phonebookService.remove(id)
-      .then(success => setPersons(persons.filter(person => person.id !== id)))
+      .then(success => { 
+        setPersons(persons.filter(person => person.id !== id))
+        setMessage({
+          message: `Deleted`,
+          style: {
+            color: 'red',
+            fontStyle: 'italic',
+            fontSize: 25
+          }
+        })
+        setTimeout(() =>{ setMessage(null)}, 5000)
+      })
     }
   }
 
@@ -51,6 +95,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message} />
       <Filter filter={filter} handleFilter={handleFilter} />
       <NewContact newPerson={newPerson} handleNewNameChange={handleNewNameChange} handleNewNumberChange={handleNewNumberChange} addPerson={addPerson} />
       <Numbers deletePerson={deletePerson} persons={getFilteredPersons()}/>
