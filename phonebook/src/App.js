@@ -35,6 +35,7 @@ const App = () => {
           }
         })
         setTimeout(() =>{ setMessage(null)}, 5000)
+        setNewPerson(person)
       })
     }
   }
@@ -54,6 +55,7 @@ const App = () => {
             }
           })
           setTimeout(() =>{ setMessage(null)}, 5000)
+          setNewPerson(person)
         })
       .catch(error => {
         setMessage({
