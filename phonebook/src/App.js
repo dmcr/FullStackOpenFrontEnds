@@ -37,6 +37,17 @@ const App = () => {
         setTimeout(() =>{ setMessage(null)}, 5000)
         setNewPerson(person)
       })
+      .catch(error => {
+        setMessage({
+          message: `Error: ${error.response.data.error}`,
+            style: {
+              color: 'red',
+              fontStyle: 'italic',
+              fontSize: 25
+            }
+        })
+        setTimeout(() =>{ setMessage(null)}, 5000)
+      })
     }
   }
 
