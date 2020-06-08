@@ -89,7 +89,6 @@ const App = () => {
         </div>
       </form>
   )
-
   
   const blogForm = () => (
     <form onSubmit={addBlog}>
@@ -124,16 +123,21 @@ const App = () => {
       {user === null ?
         loginForm() :
         <div>
-          <p>{user.name} logged in</p>
+          <p>{user.name} logged in <button onClick={() => {
+              setUser(null)
+              console.log('logging out', username, password)
+              window.localStorage.removeItem('loggedBlogappUser')
+            }}>Logout</button></p>
           {blogForm()}
+          <div>
+            <h2>blogs</h2>
+            {blogs.map(blog =>
+              <Blog key={blog.id} blog={blog} />
+            )}
+          </div>
         </div>
       }
-      <div>
-        <h2>blogs</h2>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
-      </div>
+      
     </div>
   )
 }
