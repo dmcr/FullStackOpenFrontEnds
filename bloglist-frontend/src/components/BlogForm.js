@@ -1,14 +1,20 @@
-import React from 'react'
+import React, {useState} from 'react'
 
-const BlogForm = ({
-    handleSubmit,
-    onTitleChange,
-    onAuthorChange,
-    onUrlChange,
-    newBlog
-}) => {
+const BlogForm = ({createBlog}) => {
+    const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
+
+    const onTitleChange = (event) => setNewBlog({ title: event.target.value, author: newBlog.author, url: newBlog.url })
+    const onAuthorChange = (event) => setNewBlog({ title: newBlog.title, author: event.target.value, url: newBlog.url })
+    const onUrlChange = (event) => setNewBlog({ title: newBlog.title, author: newBlog.author, url: event.target.value })
+    
+    const addBlog = (event) => {
+        event.preventDefault()
+        createBlog(newBlog)
+        setNewBlog({ title: '', author: '', url: '' })
+    }
+
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={addBlog}>
             <div>
                 Blog title: 
                 <input 

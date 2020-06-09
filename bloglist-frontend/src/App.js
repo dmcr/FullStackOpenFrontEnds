@@ -8,7 +8,6 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '' })
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -55,29 +54,17 @@ const App = () => {
   }
   
   const blogForm = () => {
-    const handleBlogTitleChange = (event) => setNewBlog({ title: event.target.value, author: newBlog.author, url: newBlog.url })
-    const handleBlogAuthorChange = (event) => setNewBlog({ title: newBlog.title, author: event.target.value, url: newBlog.url })
-    const handleBlogUrlChange = (event) => setNewBlog({ title: newBlog.title, author: newBlog.author, url: event.target.value })
-    const addBlog = (event) => {
-      event.preventDefault()
+    const createBlog = (newBlog) => {
       blogService
         .create(newBlog)
         .then(returnedBlog => {
           setBlogs(blogs.concat(returnedBlog))
-          setNewBlog({ title: '', author: '', url: '' })
         })
         .catch(error => console.log(error))
     }
-
     return (
       <Togglable buttonLabel='Add new blog'>
-        <BlogForm 
-          newBlog={newBlog}
-          handleSubmit={addBlog}
-          onAuthorChange={handleBlogAuthorChange}
-          onTitleChange={handleBlogTitleChange}
-          onUrlChange={handleBlogUrlChange}
-        />
+        <BlogForm createBlog={createBlog} />
       </Togglable>
     )
   }
