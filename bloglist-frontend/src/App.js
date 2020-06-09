@@ -28,30 +28,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-    console.log('logging in with', username, password)
-    try {
-      const user = await loginService.login({ username, password })
-
-      // Save token to local storage
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
-      console.log(window.localStorage)
-      console.log(JSON.parse(window.localStorage.getItem('loggedBlogappUser')))
-
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    }
-    catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
-  }
+ 
   
   const blogForm = () => {
     const createBlog = (newBlog) => {
@@ -70,6 +47,27 @@ const App = () => {
   }
 
   const loginForm = () => {
+    const handleLogin = async (event) => {
+      event.preventDefault()
+      console.log('logging in with', username, password)
+      try {
+        const user = await loginService.login({ username, password })
+  
+        // Save token to local storage
+        window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+  
+        setUser(user)
+        setUsername('')
+        setPassword('')
+      }
+      catch (exception) {
+        setErrorMessage('Wrong credentials')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      }
+    }
+
     return (
       <div>
         <Togglable buttonLabel='login'>
@@ -85,23 +83,26 @@ const App = () => {
     )
   }
 
+  const logOut = () => {
+    setUser(null)
+    console.log('logging out', username, password)
+    window.localStorage.removeItem('loggedBlogappUser')
+  }
+
   return (
     <div>
+    <h1>Blog App</h1>
       <div>{errorMessage}</div>
-      {user === null ? loginForm() :
+      {user === null && loginForm()}
+      {user !== null &&
         <div>
-          <p>{user.name} logged in <button onClick={() => {
-              setUser(null)
-              console.log('logging out', username, password)
-              window.localStorage.removeItem('loggedBlogappUser')
-            }}>Logout</button></p>
+          <h2>Account</h2>
+          <p>{user.name} logged in <button onClick={logOut}>Logout</button></p>
+
+          <h2>Blogs</h2>
+          {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+
           {blogForm()}
-          <div>
-            <h2>blogs</h2>
-            {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} />
-            )}
-          </div>
         </div>
       }
     </div>
