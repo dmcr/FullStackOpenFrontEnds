@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-import LoginForm from './components/Login'
+import BlogForm from './components/BlogForm'
+import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
@@ -52,47 +53,34 @@ const App = () => {
       }, 5000)
     }
   }
-  const handleBlogTitleChange = (event) => setNewBlog({ title: event.target.value, author: newBlog.author, url: newBlog.url })
-  const handleBlogAuthorChange = (event) => setNewBlog({ title: newBlog.title, author: event.target.value, url: newBlog.url })
-  const handleBlogUrlChange = (event) => setNewBlog({ title: newBlog.title, author: newBlog.author, url: event.target.value })
-
-  const addBlog = (event) => {
-    event.preventDefault()
-
-    blogService
-      .create(newBlog)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setNewBlog({ title: '', author: '', url: '' })
-      })
-  }
   
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <div>
-        Blog title: 
-        <input 
-          value={newBlog.title}
-          onChange={handleBlogTitleChange}
+  const blogForm = () => {
+    const handleBlogTitleChange = (event) => setNewBlog({ title: event.target.value, author: newBlog.author, url: newBlog.url })
+    const handleBlogAuthorChange = (event) => setNewBlog({ title: newBlog.title, author: event.target.value, url: newBlog.url })
+    const handleBlogUrlChange = (event) => setNewBlog({ title: newBlog.title, author: newBlog.author, url: event.target.value })
+    const addBlog = (event) => {
+      event.preventDefault()
+      blogService
+        .create(newBlog)
+        .then(returnedBlog => {
+          setBlogs(blogs.concat(returnedBlog))
+          setNewBlog({ title: '', author: '', url: '' })
+        })
+        .catch(error => console.log(error))
+    }
+
+    return (
+      <Togglable buttonLabel='Add new blog'>
+        <BlogForm 
+          newBlog={newBlog}
+          handleSubmit={addBlog}
+          onAuthorChange={handleBlogAuthorChange}
+          onTitleChange={handleBlogTitleChange}
+          onUrlChange={handleBlogUrlChange}
         />
-      </div>
-      <div>
-        Author:
-        <input 
-          value={newBlog.author}
-          onChange={handleBlogAuthorChange}
-        />
-      </div>
-      <div>
-        URL:
-        <input 
-          value={newBlog.url}
-          onChange={handleBlogUrlChange}
-        />
-      </div>
-      <button type="submit">save</button>
-    </form>
-  )
+      </Togglable>
+    )
+  }
 
   const loginForm = () => {
     return (
