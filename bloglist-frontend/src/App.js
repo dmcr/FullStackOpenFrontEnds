@@ -33,7 +33,7 @@ const App = () => {
     }
   }, [])
 
-  //Functions
+  //Click/Submit handlers
   const createBlog = (newBlog) => {
     blogFormRef.current.toggleVisibility()
     blogService
@@ -44,9 +44,23 @@ const App = () => {
       .catch(error => console.log(error))
   }
 
+  const addBlogLike = (id) => {
+    // Nothing to prevent a user adding multiple likes. 
+    // Could be achieved by having the user doc in DB store array of liked object ids
+    // Like button then switched for liked button if already liked which perfroms reverse operation
+
+    // Add like to blog locally
+    setBlogs(blogs.map(blog => blog.id === id ? {likes: blog.likes++, ...blog} : blog))
+    // Send request to increment blog likes and override local update with response
+    blogService
+      .addLike(id)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(blog => blog.id === returnedBlog.id ? returnedBlog : blog))
+      })
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging in with', username, password)
     try {
       const user = await loginService.login({ username, password })
 
@@ -67,7 +81,6 @@ const App = () => {
 
   const logOut = () => {
     setUser(null)
-    console.log('logging out', username, password)
     window.localStorage.removeItem('loggedBlogappUser')
   }
 
@@ -104,7 +117,7 @@ const App = () => {
           <p>{user.name} logged in <button onClick={logOut}>Logout</button></p>
 
           <h2>Blogs</h2>
-          {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+          {blogs.map(blog => <Blog key={blog.id} blog={blog} addBlogLike={addBlogLike} />)}
 
           {blogForm()}
         </div>
