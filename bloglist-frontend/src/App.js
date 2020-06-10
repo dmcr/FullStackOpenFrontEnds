@@ -7,12 +7,17 @@ import loginService from './services/login'
 import Togglable from './components/Togglable'
 
 const App = () => {
+  //States
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
 
+  //Refs
+  const blogFormRef = React.createRef()
+
+  //Effects
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -28,47 +33,52 @@ const App = () => {
     }
   }, [])
 
- 
-  
-  const blogForm = () => {
-    const createBlog = (newBlog) => {
-      blogService
-        .create(newBlog)
-        .then(returnedBlog => {
-          setBlogs(blogs.concat(returnedBlog))
-        })
-        .catch(error => console.log(error))
-    }
-    return (
-      <Togglable buttonLabel='Add new blog'>
-        <BlogForm createBlog={createBlog} />
-      </Togglable>
-    )
+  //Functions
+  const createBlog = (newBlog) => {
+    blogFormRef.current.toggleVisibility()
+    blogService
+      .create(newBlog)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+      })
+      .catch(error => console.log(error))
   }
 
-  const loginForm = () => {
-    const handleLogin = async (event) => {
-      event.preventDefault()
-      console.log('logging in with', username, password)
-      try {
-        const user = await loginService.login({ username, password })
-  
-        // Save token to local storage
-        window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-  
-        setUser(user)
-        setUsername('')
-        setPassword('')
-      }
-      catch (exception) {
-        setErrorMessage('Wrong credentials')
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-      }
-    }
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    console.log('logging in with', username, password)
+    try {
+      const user = await loginService.login({ username, password })
 
-    return (
+      // Save token to local storage
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    }
+    catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const logOut = () => {
+    setUser(null)
+    console.log('logging out', username, password)
+    window.localStorage.removeItem('loggedBlogappUser')
+  }
+
+  //Components
+  const blogForm = () => (
+      <Togglable buttonLabel='Add new blog' ref={blogFormRef}>
+        <BlogForm createBlog={createBlog} />
+      </Togglable>
+  )
+
+  const loginForm = () => (
       <div>
         <Togglable buttonLabel='login'>
           <LoginForm 
@@ -80,15 +90,9 @@ const App = () => {
           />
         </Togglable>
       </div>
-    )
-  }
+  )
 
-  const logOut = () => {
-    setUser(null)
-    console.log('logging out', username, password)
-    window.localStorage.removeItem('loggedBlogappUser')
-  }
-
+  //App
   return (
     <div>
     <h1>Blog App</h1>
