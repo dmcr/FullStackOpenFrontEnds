@@ -17,6 +17,11 @@ const App = () => {
   //Refs
   const blogFormRef = React.createRef()
 
+  //State manipulation
+  const sortBlogsByLikes = () => {
+    setBlogs(blogs.sort((a, b) => a.likes < b.likes))
+  }
+
   //Effects
   useEffect(() => {
     blogService.getAll().then(blogs => {
@@ -47,17 +52,29 @@ const App = () => {
   }
 
   const addBlogLike = (id) => {
-    // Nothing to prevent a user adding multiple likes. 
-    // Could be achieved by having the user doc in DB store array of liked object ids
-    // Like button then switched for liked button if already liked which perfroms reverse operation
-
-    // Add like to blog locally
+     // Add like to blog locally
     setBlogs(blogs.map(blog => blog.id === id ? {likes: blog.likes++, ...blog} : blog))
     // Send request to increment blog likes and override local update with response
     blogService
       .addLike(id)
       .then(returnedBlog => {
         setBlogs(blogs.map(blog => blog.id === returnedBlog.id ? returnedBlog : blog))
+        sortBlogsByLikes()
+      })
+  }
+
+  const deleteBlog = (blogToRemove) => {
+    // Remove blog locally
+    setBlogs(blogs.filter(blog => blog.id !== blogToRemove.id))
+    // Send delete request
+    blogService
+      .deleteBlog(blogToRemove.id)
+      .then(status => {
+        // If blog did not belong to user, re-add to state
+        if (status.toString() !== '204') {
+          setBlogs(blogs.concat(blogToRemove))
+          sortBlogsByLikes()
+        }
       })
   }
 
@@ -85,8 +102,6 @@ const App = () => {
     setUser(null)
     window.localStorage.removeItem('loggedBlogappUser')
   }
-
-  
 
   //Components
   const blogForm = () => (
@@ -121,7 +136,15 @@ const App = () => {
           <p>{user.name} logged in <button onClick={logOut}>Logout</button></p>
 
           <h2>Blogs</h2>
-          {blogs.map(blog => <Blog key={blog.id} blog={blog} addBlogLike={addBlogLike} />)}
+          {blogs.map(blog => 
+            <Blog 
+              key={blog.id} 
+              blog={blog} 
+              addBlogLike={addBlogLike} 
+              username={user.username} 
+              deleteBlog={deleteBlog}
+            />
+          )}
 
           {blogForm()}
         </div>
