@@ -8,16 +8,16 @@ const Blog = ({ blog, addBlogLike, deleteBlog, username }) => {
   }
 
   return(
-  <div>
-    <p>
-      Title: {blog.title}, 
-      Author: {blog.author}, 
-      URL: {blog.url}, 
+    <div>
+      <p>
+      Title: {blog.title},
+      Author: {blog.author},
+      URL: {blog.url},
       Likes: {blog.likes}
-      <button onClick={addLike}>Like</button>
-      {blog.user && blog.user.username === username && <button onClick={removeBlog}>Remove</button>}
-    </p>
-  </div>
+        <button onClick={addLike}>Like</button>
+        {blog.user && blog.user.username === username && <button onClick={removeBlog}>Remove</button>}
+      </p>
+    </div>
   )
 }
 

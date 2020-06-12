@@ -28,7 +28,7 @@ const App = () => {
       blogs.sort((a, b) => a.likes < b.likes )
       setBlogs( blogs )
     }
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -52,8 +52,8 @@ const App = () => {
   }
 
   const addBlogLike = (id) => {
-     // Add like to blog locally
-    setBlogs(blogs.map(blog => blog.id === id ? {likes: blog.likes++, ...blog} : blog))
+    // Add like to blog locally
+    setBlogs(blogs.map(blog => blog.id === id ? { likes: blog.likes++, ...blog } : blog))
     // Send request to increment blog likes and override local update with response
     blogService
       .addLike(id)
@@ -105,29 +105,29 @@ const App = () => {
 
   //Components
   const blogForm = () => (
-      <Togglable buttonLabel='Add new blog' ref={blogFormRef}>
-        <BlogForm createBlog={createBlog} />
-      </Togglable>
+    <Togglable buttonLabel='Add new blog' ref={blogFormRef}>
+      <BlogForm createBlog={createBlog} />
+    </Togglable>
   )
 
   const loginForm = () => (
-      <div>
-        <Togglable buttonLabel='login'>
-          <LoginForm 
-            username={username}
-            password={password}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-            handleSubmit={handleLogin}
-          />
-        </Togglable>
-      </div>
+    <div>
+      <Togglable buttonLabel='login'>
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleSubmit={handleLogin}
+        />
+      </Togglable>
+    </div>
   )
 
   //App
   return (
     <div>
-    <h1>Blog App</h1>
+      <h1>Blog App</h1>
       <div>{errorMessage}</div>
       {user === null && loginForm()}
       {user !== null &&
@@ -136,12 +136,12 @@ const App = () => {
           <p>{user.name} logged in <button onClick={logOut}>Logout</button></p>
 
           <h2>Blogs</h2>
-          {blogs.map(blog => 
-            <Blog 
-              key={blog.id} 
-              blog={blog} 
-              addBlogLike={addBlogLike} 
-              username={user.username} 
+          {blogs.map(blog =>
+            <Blog
+              key={blog.id}
+              blog={blog}
+              addBlogLike={addBlogLike}
+              username={user.username}
               deleteBlog={deleteBlog}
             />
           )}
