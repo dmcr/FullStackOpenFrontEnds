@@ -26,11 +26,22 @@ describe('<Togglable />', () => {
     expect(div).toHaveStyle('display: none')
   })
 
-  test('after clicking the button, children are displayer', () => {
+  test('after clicking the button, children are displayed', () => {
     const button = component.getByText('show...')
     fireEvent.click(button)
 
     const div = component.container.querySelector('.togglableContent')
     expect(div).not.toHaveStyle('display:none')
+  })
+
+  test('after clicking the button a second time, children are hidden', () => {
+    const button = component.getByText('show...')
+    fireEvent.click(button)
+
+    const closeButton = component.getByText('cancel')
+    fireEvent.click(closeButton)
+
+    const div = component.container.querySelector('.togglableContent')
+    expect(div).toHaveStyle('display: none')
   })
 })
