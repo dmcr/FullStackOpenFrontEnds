@@ -1,15 +1,3 @@
-const reducer = (state = initialState, action) => {
-  console.log('Annecdote State Action:', action)
-  switch(action.type) {
-    case 'NEW_ANECDOTE':
-      return [...state, asObject(action.data)]
-    case 'NEW_VOTE':
-      return state.map(annecdote => annecdote.id === action.data.id ? { ...annecdote, votes: annecdote.votes + 1 } : annecdote)
-    default:
-      return state
-  }
-}
-
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -30,20 +18,32 @@ const asObject = (anecdote) => {
   }
 }
 
-const incrementVoteOf = (id) => {
+const initialState = anecdotesAtStart.map(asObject)
+
+const anecdoteReducer = (state = initialState, action) => {
+  console.log('Annecdote State Action:', action)
+  switch(action.type) {
+    case 'NEW_ANECDOTE':
+      return [...state, asObject(action.data)]
+    case 'NEW_VOTE':
+      return state.map(annecdote => annecdote.id === action.data.id ? { ...annecdote, votes: annecdote.votes + 1 } : annecdote)
+    default:
+      return state
+  }
+}
+
+export const incrementVoteOf = (id) => {
   return {
     type: 'NEW_VOTE',
     data: { id }
   }
 }
 
-const createAnecdote = (anecdote) => {
+export const createAnecdote = (anecdote) => {
   return {
     type: 'NEW_ANECDOTE',
     data: anecdote
   }
 }
 
-const initialState = anecdotesAtStart.map(asObject)
-
-export default { reducer, incrementVoteOf }
+export default anecdoteReducer

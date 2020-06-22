@@ -1,12 +1,10 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import incrementVoteOf  from '../reducers/anecdoteReducer'
+import { incrementVoteOf } from '../reducers/anecdoteReducer'
 
-
-
-const Anecdote = ({ anecdote, handleClick }) => {
+const Anecdote = ({ anecdote, handleClick, id }) => {
     return (
-        <li key={anecdote.id}>
+        <li key={id}>
             {anecdote.content}
             {anecdote.votes}
             <button onClick={handleClick}>vote</button>
@@ -30,9 +28,10 @@ const Anecdotes = () => {
             {anecdotes.map(anecdote =>
                 <Anecdote 
                 anecdote={anecdote} 
+                key={anecdote.id}
                 handleClick={() => dispatch(incrementVoteOf(anecdote.id))} />
             )}
         </ul>
     )}
 
-export default { Anecdotes }
+export default Anecdotes 
