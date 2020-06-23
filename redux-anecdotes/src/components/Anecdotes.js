@@ -12,13 +12,6 @@ const Anecdote = ({ anecdote, handleClick, id }) => {
     )
 }
 
-// const addAnecdote = (event) => {
-//     event.preventDefault()
-//     const content = event.target.anecdote.value
-//     event.target.anecdote.value = ''
-//     dispatch(createAnecdote(content))
-//   }
-
 const Anecdotes = () => {
     const dispatch = useDispatch()
     const anecdotes = useSelector(state => state)
