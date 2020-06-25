@@ -16,10 +16,11 @@ const Anecdote = ({ anecdote, handleClick, id }) => {
 const Anecdotes = () => {
     const dispatch = useDispatch()
     const anecdotes = useSelector(state => state.anecdotes)
-
+    const filter = useSelector(state => state.filter)
+    const filteredAnecdotes = anecdotes.filter(anecdote => anecdote.content.toLowerCase().indexOf(filter.toLowerCase()) !== -1)
     return (
         <ul>
-            {anecdotes.map(anecdote =>
+            {filteredAnecdotes.map(anecdote =>
                 <Anecdote 
                 anecdote={anecdote} 
                 key={anecdote.id}
