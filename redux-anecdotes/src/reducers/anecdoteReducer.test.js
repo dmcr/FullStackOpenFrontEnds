@@ -1,5 +1,6 @@
 import annecdoteReducer from './anecdoteReducer'
 import deepFreeze from 'deep-freeze'
+import anecdoteReducer from './anecdoteReducer'
 
 describe('annecdoteReducer', () => {
     test('returns new state with action NEW_ANNECDOTE', () => {
@@ -35,5 +36,28 @@ describe('annecdoteReducer', () => {
         const testState = annecdoteReducer(state, action)
         expect(testState).toHaveLength(1)
         expect(testState[0].votes).toBe(1)
+    })
+    test('LOAD_ANECDOTES', () => {
+        const initialState = []
+        const loadState = [
+            {
+                "content": "If it hurts, do it more often",
+                "id": "47145",
+                "votes": 0
+              },
+              {
+                "content": "Adding manpower to a late software project makes it later!",
+                "id": "21149",
+                "votes": 0
+              }
+        ]
+        const action = {
+            type: 'LOAD_ANECDOTES',
+            data: loadState
+        }
+        deepFreeze(initialState)
+        const testState = anecdoteReducer(initialState, action)
+        expect(testState).toHaveLength(2)
+        expect(testState[1].content).toBe('Adding manpower to a late software project makes it later!')
     })
 })
