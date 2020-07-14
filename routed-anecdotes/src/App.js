@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Switch, Route, Link, Redirect, useRouteMatch, useHistory } from 'react-router-dom'
 import { useField } from './hooks'
+import FormField from './components/FormField'
 
 const Menu = () => {
   const padding = {
@@ -62,7 +63,7 @@ const Footer = () => (
 
 const CreateNew = (props) => {
   const history = useHistory()
-  
+
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
@@ -78,23 +79,30 @@ const CreateNew = (props) => {
     history.push('/anecdotes')
   }
 
+  const handleReset = (e) => {
+    content.reset()
+    author.reset()
+    info.reset()
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onReset={handleReset}>
         <div>
           content
-          <input {...content} />
+          <FormField props={content} />
         </div>
         <div>
           author
-          <input {...author} />
+          <FormField props={author} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <FormField props={info} />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button>
+        <button type='reset' onClick={handleReset}>reset</button>
       </form>
     </div>
   )
